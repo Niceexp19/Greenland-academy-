@@ -1,1 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Greenfield Academy</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: system-ui, sans-serif; background: #f1f5f9; color: #1e293b; }
 
+        .navbar {
+            background: linear-gradient(135deg, #0f2b3d, #1e4a76);
+            padding: 0 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        .navbar-brand {
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 800;
+            text-decoration: none;
+        }
+        .navbar-brand span { color: #60a5fa; }
+        .navbar-links { display: flex; gap: 0.5rem; align-items: center; }
+        .navbar-links a {
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+        .navbar-links a:hover { background: rgba(255,255,255,0.15); color: white; }
+
+        .layout { display: flex; min-height: calc(100vh - 60px); }
+
+        .sidebar {
+            width: 230px;
+            background: white;
+            border-right: 1px solid #e2e8f0;
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 60px;
+            height: calc(100vh - 60px);
+            overflow-y: auto;
+        }
+        .sidebar-user {
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .sidebar-user h4 { font-size: 0.95rem; font-weight: 700; color: #0f172a; }
+        .sidebar-user p { font-size: 0.8rem; color: #64748b; margin-top: 0.2rem; }
+        .sidebar-section { padding: 0 1rem; margin-bottom: 1.5rem; }
+        .sidebar-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 0 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            padding: 0.6rem 0.8rem;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #475569;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: 0.2s;
+            margin-bottom: 0.2rem;
+        }
+        .sidebar a:hover { background: #f1f5f9; color: #0f172a; }
+        .sidebar a.active { background: #eff6ff; color: #1e40af; }
+
+        .main-content { flex: 1; padding: 2rem; overflow-x: hidden; }
+
+        .card {
+            background: white;
+            border-radius: 1.2rem;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+            margin-bottom: 1.5rem;
+        }
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #0f172a;
+            border-left: 4px solid #2563eb;
+            padding-left: 0.8rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .stat-card {
+            border-radius: 1.2rem;
+            padding: 1.2rem;
+            text-align: center;
+            color: white;
+        }
+        .stat-label { font-size: 0.8rem; opacity: 0.85; margin-bottom: 0.4rem; }
+        .stat-value { font-size: 2rem; font-weight: 800; }
+        .stat-icon { font-size: 1.5rem; margin-top: 0.3rem; }
+
+        .form-group { margin-bottom: 1rem; }
+        .form-label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 0.4rem;
+        }
+        .form-control {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            font-size: 0.95rem;
+            background: #f8fafc;
+            color: #0f172a;
+            transition: 0.2s;
+        }
+        .form-control:focus { outline: none; border-color: #2563eb; background: white; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 30px;
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: 0.2s;
+        }
+        .btn-primary { background: linear-gradient(135deg, #0f2b3d, #1e4a76); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(15,43,61,0.3); }
+        .btn-success { background: #16a34a; color: white; }
+        .btn-danger { background: #fef2f2; color: #dc2626; padding: 5px 12px; font-size: 0.8rem; }
+        .btn-warning { background: #fef9c3; color: #854d0e; padding: 5px 12px; font-size: 0.8rem; }
+        .btn-sm { padding: 5px 14px; font-size: 0.8rem; }
+
+        .table-container { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        thead tr { background: linear-gradient(135deg, #0f2b3d, #1e4a76); color: white; }
+        th { padding: 12px; text-align: left; font-size: 0.85rem; }
+        td { padding: 12px; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; }
+        tbody tr:hover { background: #f8fafc; }
+
+        .badge { padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+        .badge-success { background: #dcfce7; color: #166534; }
+        .badge-danger { background: #fee2e2; color: #991b1b; }
+        .badge-warning { background: #fef9c3; color: #854d0e; }
+        .badge-info { background: #dbeafe; color: #1e40af; }
+        .badge-pending { background: #fff7ed; color: #c2410c; }
+
+        .alert { padding: 1rem 1.5rem; border-radius: 12px; margin-bottom: 1.5rem; font-weight: 500; }
+        .alert-success { background: #f0fdf4; border: 1px solid #86efac; color: #166534; }
+        .alert-error { background: #fef2f2; border: 1px solid #fca5a5; color: #991b1b; }
+        .alert-warning { background: #fffbeb; border: 1px solid #fcd34d; color: #92400e; }
+
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+            .main-content { padding: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <a href="/" class="navbar-brand"> Greenland <span>Academy</span></a>
+    {% if session.user_id %}
+    <div class="navbar-links">
+        <a href="/dashboard">🏠</a>
+        <a href="/logout" style="background: rgba(220,38,38,0.3);">Logout</a>
+    </div>
+    {% else %}
+    <div class="navbar-links">
+        <a href="/login">Login</a>
+        <a href="/register" style="background: rgba(255,255,255,0.2);">Register</a>
+    </div>
+    {% endif %}
+</nav>
+
+<div class="layout">
+    {% if session.user_id %}
+    <div class="sidebar">
+        <div class="sidebar-user">
+            <h4>{{ session.full_name }}</h4>
+            <p>
+                {% if session.role == 'admin' %} Administrator
+                {% elif session.role == 'teacher' %} Teacher
+                {% else %}👨‍👩‍👦 Parent{% endif %}
+            </p>
+        </div>
+
+        {% if session.role == 'admin' %}
+        <div class="sidebar-section">
+            <div class="sidebar-label">Admin Panel</div>
+            <a href="/admin/dashboard"> Dashboard</a>
+            <a href="/admin/students"> Students</a>
+            <a href="/admin/teachers"> Teachers</a>
+            <a href="/admin/parents"> Parents</a>
+            <a href="/admin/fees"> Fees</a>
+            <a href="/admin/announcements">📢 Announcements</a>
+        </div>
+
+        {% elif session.role == 'teacher' %}
+        <div class="sidebar-section">
+            <div class="sidebar-label">Teacher Panel</div>
+            <a href="/teacher/dashboard"> Dashboard</a>
+            <a href="/teacher/students"> Students</a>
+            <a href="/teacher/grades">📊 Grades</a>
+            <a href="/teacher/attendance">📋 Attendance</a>
+        </div>
+
+        {% elif session.role == 'parent' %}
+        <div class="sidebar-section">
+            <div class="sidebar-label">Parent Panel</div>
+            <a href="/parent/dashboard"> Dashboard</a>
+        </div>
+        {% endif %}
+
+        <div class="sidebar-section">
+            <a href="/logout" style="color: #dc2626;"> Logout</a>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="main-content">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </div>
+</div>
+
+</body>
+  </html>
