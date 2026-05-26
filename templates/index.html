@@ -1,1 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Greenland Academy</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: system-ui, sans-serif; background: #f1f5f9; }
 
+        .navbar {
+            background: linear-gradient(135deg, #0f2b3d, #1e4a76);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .brand { color: white; font-size: 1.3rem; font-weight: 800; text-decoration: none; }
+        .brand span { color: #60a5fa; }
+        .nav-btns { display: flex; gap: 1rem; }
+        .btn-white { background: white; color: #0f2b3d; padding: 8px 20px; border-radius: 30px; text-decoration: none; font-weight: 700; font-size: 0.9rem; }
+        .btn-outline { border: 2px solid white; color: white; padding: 8px 20px; border-radius: 30px; text-decoration: none; font-weight: 700; font-size: 0.9rem; }
+
+        .hero {
+            background: linear-gradient(135deg, #0f2b3d, #1e4a76);
+            padding: 80px 2rem;
+            text-align: center;
+            color: white;
+        }
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            margin-bottom: 1.5rem;
+        }
+        .hero h1 { font-size: 3rem; font-weight: 800; margin-bottom: 1rem; }
+        .hero h1 span { color: #60a5fa; }
+        .hero p { font-size: 1.1rem; color: #cbd5e1; max-width: 600px; margin: 0 auto 2rem; }
+        .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+        .btn-hero { background: white; color: #0f2b3d; padding: 12px 30px; border-radius: 40px; text-decoration: none; font-weight: 700; }
+        .btn-hero-outline { border: 2px solid white; color: white; padding: 12px 30px; border-radius: 40px; text-decoration: none; font-weight: 700; }
+
+        .features { padding: 60px 2rem; max-width: 1100px; margin: 0 auto; }
+        .features h2 { text-align: center; font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; }
+        .features p { text-align: center; color: #64748b; margin-bottom: 3rem; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
+        .feature-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            border: 1px solid #e2e8f0;
+            transition: 0.2s;
+            text-align: center;
+        }
+        .feature-card:hover { transform: translateY(-5px); box-shadow: 0 20px 30px rgba(0,0,0,0.08); }
+        .feature-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+        .feature-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .feature-card p { color: #64748b; font-size: 0.9rem; }
+
+        .roles-section { background: #0f2b3d; padding: 60px 2rem; text-align: center; }
+        .roles-section h2 { color: white; font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; }
+        .roles-section p { color: #94a3b8; margin-bottom: 3rem; }
+        .roles-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; max-width: 900px; margin: 0 auto; }
+        .role-card { background: rgba(255,255,255,0.05); border-radius: 1.5rem; padding: 2rem; border: 1px solid rgba(255,255,255,0.1); }
+        .role-card h3 { color: #60a5fa; font-size: 1.2rem; margin-bottom: 1rem; }
+        .role-card ul { list-style: none; text-align: left; }
+        .role-card ul li { color: #94a3b8; font-size: 0.9rem; padding: 0.3rem 0; }
+        .role-card ul li::before { content: "✓ "; color: #60a5fa; }
+
+        .announcements-section { padding: 60px 2rem; background: white; }
+        .announcements-section h2 { text-align: center; font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; }
+        .announcements-section p { text-align: center; color: #64748b; margin-bottom: 3rem; }
+        .ann-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; max-width: 1000px; margin: 0 auto; }
+        .ann-card { background: #f8fafc; border-radius: 1.2rem; padding: 1.5rem; border-left: 4px solid #2563eb; }
+        .ann-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .ann-card p { color: #64748b; font-size: 0.9rem; }
+
+        .cta { background: linear-gradient(135deg, #0f2b3d, #1e4a76); padding: 60px 2rem; text-align: center; color: white; }
+        .cta h2 { font-size: 2rem; font-weight: 800; margin-bottom: 1rem; }
+        .cta p { color: #cbd5e1; margin-bottom: 2rem; }
+
+        footer { background: #0f172a; color: #64748b; text-align: center; padding: 2rem; font-size: 0.85rem; }
+        footer span { color: #60a5fa; }
+
+        @media (max-width: 600px) { .hero h1 { font-size: 2rem; } }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <a href="/" class="brand"> Greenland <span>Academy</span></a>
+    <div class="nav-btns">
+        <a href="/login" class="btn-white">Login</a>
+        <a href="/register" class="btn-outline">Register</a>
+    </div>
+</nav>
+
+<section class="hero">
+    <div class="hero-badge"> Welcome to Greenland Academy</div>
+    <h1>Smart School<br><span>Management System</span></h1>
+    <p>A complete digital solution for students, teachers, parents and administrators.</p>
+    <div class="hero-btns">
+        <a href="/register" class="btn-hero">Get Started →</a>
+        <a href="/login" class="btn-hero-outline">Login</a>
+    </div>
+</section>
+
+<section class="features">
+    <h2>Everything Your School Needs </h2>
+    <p>One platform for everyone in your school community</p>
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">👨‍🎓</div>
+            <h3>Student Management</h3>
+            <p>Register and manage all students with detailed profiles and academic records.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📊</div>
+            <h3>Grade Tracking</h3>
+            <p>Record CA scores and exam scores with automatic grade calculation.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📋</div>
+            <h3>Attendance</h3>
+            <p>Mark and monitor daily attendance for all classes easily.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">💰</div>
+            <h3>Fee Management</h3>
+            <p>Track school fees and payment status for every student.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📢</div>
+            <h3>Announcements</h3>
+            <p>Post targeted announcements to teachers, parents or everyone.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📄</div>
+            <h3>Report Cards</h3>
+            <p>Generate comprehensive student report cards instantly.</p>
+        </div>
+    </div>
+</section>
+
+<section class="roles-section">
+    <h2>Built For Everyone 👥</h2>
+    <p>Different dashboards for different roles</p>
+    <div class="roles-grid">
+        <div class="role-card">
+            <h3> Admin</h3>
+            <ul>
+                <li>View all sections</li>
+                <li>Approve teachers</li>
+                <li>Manage students</li>
+                <li>Track all fees</li>
+                <li>Post announcements</li>
+            </ul>
+        </div>
+        <div class="role-card">
+            <h3> Teacher</h3>
+            <ul>
+                <li>Edit student info</li>
+                <li>Record grades</li>
+                <li>Mark attendance</li>
+                <li>View student reports</li>
+            </ul>
+        </div>
+        <div class="role-card">
+            <h3> Parent</h3>
+            <ul>
+                <li>View child's grades</li>
+                <li>Check attendance</li>
+                <li>View fee status</li>
+                <li>Read announcements</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+{% if announcements %}
+<section class="announcements-section">
+    <h2>Latest Announcements 📢</h2>
+    <p>Stay updated with school news</p>
+    <div class="ann-grid">
+        {% for ann in announcements %}
+        <div class="ann-card">
+            <h3>📢 {{ ann['title'] }}</h3>
+            <p>{{ ann['content'][:150] }}...</p>
+            <p style="margin-top: 0.8rem; font-size: 0.8rem; color: #94a3b8;">— {{ ann['author'] }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+<section class="cta">
+    <h2>Join Greenland Academy Today! 🎓</h2>
+    <p>Register as a parent or teacher and get started!</p>
+    <a href="/register" class="btn-hero" style="font-size: 1rem; padding: 14px 40px;">Register Now →</a>
+</section>
+
+<footer>
+    <p>© 2026 <span>Greenland Academy</span> · Abuja, Nigeria 🇳🇬</p>
+</footer>
+
+</body>
+</html>
