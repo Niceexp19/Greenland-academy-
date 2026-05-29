@@ -1,1 +1,145 @@
+{% extends 'base.html' %}
+{% block content %}
 
+<div style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+    <h1 style="font-size: 1.5rem; font-weight: 800; color: #0f172a;">👨‍🎓 Student Management</h1>
+    <span class="badge badge-info" style="font-size: 0.9rem; padding: 8px 16px;">Total: {{ total }}</span>
+</div>
+
+<!-- Add Student -->
+<div class="card">
+    <div class="card-title">➕ Register New Student</div>
+    <form method="POST" action="/admin/students">
+        <div class="form-grid">
+            <div class="form-group">
+                <label class="form-label">Full Name</label>
+                <input type="text" name="full_name" placeholder="Student full name" required class="form-control">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Admission Number</label>
+                <input type="text" name="admission_number" placeholder="e.g. GFA/2026/001" required class="form-control">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Class</label>
+                <select name="class" required class="form-control">
+                    <option value="">Select Class</option>
+                    <optgroup label="Primary">
+                        <option>Primary 1</option>
+                        <option>Primary 2</option>
+                        <option>Primary 3</option>
+                        <option>Primary 4</option>
+                        <option>Primary 5</option>
+                        <option>Primary 6</option>
+                    </optgroup>
+                    <optgroup label="Junior Secondary">
+                        <option>JSS 1</option>
+                        <option>JSS 2</option>
+                        <option>JSS 3</option>
+                    </optgroup>
+                    <optgroup label="Senior Secondary">
+                        <option>SSS 1</option>
+                        <option>SSS 2</option>
+                        <option>SSS 3</option>
+                    </optgroup>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Section</label>
+                <select name="section" class="form-control">
+                    <option value="A">Section A</option>
+                    <option value="B">Section B</option>
+                    <option value="C">Section C</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Gender</label>
+                <select name="gender" required class="form-control">
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Date of Birth</label>
+                <input type="date" name="date_of_birth" class="form-control">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Parent/Guardian</label>
+                <select name="parent_id" class="form-control">
+                    <option value="">Select Parent (Optional)</option>
+                    {% for parent in parents %}
+                    <option value="{{ parent['id'] }}">{{ parent['full_name'] }} — {{ parent['phone'] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Address</label>
+                <input type="text" name="address" placeholder="Student address" class="form-control">
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">👨‍🎓 Register Student</button>
+    </form>
+</div>
+
+<!-- Search & Filter -->
+<div class="card">
+    <div style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center;">
+        <form method="GET" action="/admin/students" style="flex: 1; min-width: 200px; display: flex; gap: 0.5rem;">
+            <input type="text" name="search" placeholder="🔍 Search name or admission number..." value="{{ search }}" class="form-control" style="border-radius: 30px;">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <a href="/admin/students" style="padding: 8px 16px; border-radius: 30px; text-decoration: none; font-weight: 600; font-size: 0.85rem; background: {% if not class_filter %}#0f2b3d{% else %}#f1f5f9{% endif %}; color: {% if not class_filter %}white{% else %}#334155{% endif %};">All</a>
+            {% for cls in ['Primary 1','Primary 2','Primary 3','Primary 4','Primary 5','Primary 6','JSS 1','JSS 2','JSS 3','SSS 1','SSS 2','SSS 3'] %}
+            <a href="/admin/students?class={{ cls }}" style="padding: 8px 16px; border-radius: 30px; text-decoration: none; font-weight: 600; font-size: 0.85rem; background: {% if class_filter == cls %}#0f2b3d{% else %}#f1f5f9{% endif %}; color: {% if class_filter == cls %}white{% else %}#334155{% endif %};">{{ cls }}</a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Students Table -->
+<div class="card">
+    <div class="card-title">📋 All Students</div>
+    {% if students %}
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Admission No.</th>
+                    <th>Full Name</th>
+                    <th>Class</th>
+                    <th>Section</th>
+                    <th>Gender</th>
+                    <th>Parent</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in students %}
+                <tr>
+                    <td style="font-family: monospace; color: #2563eb;">{{ s['admission_number'] }}</td>
+                    <td style="font-weight: 600;">{{ s['full_name'] }}</td>
+                    <td><span class="badge badge-info">{{ s['class'] }}</span></td>
+                    <td style="color: #475569;">{{ s['section'] }}</td>
+                    <td style="color: #475569;">{{ s['gender'] }}</td>
+                    <td style="color: #475569; font-size: 0.85rem;">{{ s['parent_name'] or '—' }}</td>
+                    <td>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <a href="/report/{{ s['id'] }}" class="btn btn-sm btn-primary">📄 Report</a>
+                            <a href="/admin/delete_student/{{ s['id'] }}" onclick="return confirm('Delete this student?')" class="btn btn-danger">🗑️</a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div style="text-align: center; padding: 3rem; color: #94a3b8;">
+        <div style="font-size: 3rem; margin-bottom: 1rem;">👨‍🎓</div>
+        <p style="font-size: 1.1rem; font-weight: 600;">No students found!</p>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}
