@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div style="margin-bottom: 1.5rem;">
+    <h1 style="font-size: 1.5rem; font-weight: 800; color: #0f172a;">✏️ Edit Student</h1>
+</div>
+
+<div class="card">
+    <div class="card-title">✏️ Update Student Information</div>
+    <form method="POST" action="/teacher/edit_student/{{ student['id'] }}">
+        <div class="form-grid">
+            <div class="form-group">
+                <label class="form-label">Full Name</label>
+                <input type="text" name="full_name" value="{{ student['full_name'] }}" required class="form-control">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Class</label>
+                <select name="class" required class="form-control">
+                    <optgroup label="Primary">
+                        {% for cls in ['Primary 1','Primary 2','Primary 3','Primary 4','Primary 5','Primary 6'] %}
+                        <option value="{{ cls }}" {% if student['class'] == cls %}selected{% endif %}>{{ cls }}</option>
+                        {% endfor %}
+                    </optgroup>
+                    <optgroup label="Junior Secondary">
+                        {% for cls in ['JSS 1','JSS 2','JSS 3'] %}
+                        <option value="{{ cls }}" {% if student['class'] == cls %}selected{% endif %}>{{ cls }}</option>
+                        {% endfor %}
+                    </optgroup>
+                    <optgroup label="Senior Secondary">
+                        {% for cls in ['SSS 1','SSS 2','SSS 3'] %}
+                        <option value="{{ cls }}" {% if student['class'] == cls %}selected{% endif %}>{{ cls }}</option>
+                        {% endfor %}
+                    </optgroup>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Section</label>
+                <select name="section" class="form-control">
+                    {% for sec in ['A','B','C'] %}
+                    <option value="{{ sec }}" {% if student['section'] == sec %}selected{% endif %}>Section {{ sec }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Gender</label>
+                <select name="gender" required class="form-control">
+                    <option value="Male" {% if student['gender'] == 'Male' %}selected{% endif %}>Male</option>
+                    <option value="Female" {% if student['gender'] == 'Female' %}selected{% endif %}>Female</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Date of Birth</label>
+                <input type="date" name="date_of_birth" value="{{ student['date_of_birth'] or '' }}" class="form-control">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Address</label>
+                <input type="text" name="address" value="{{ student['address'] or '' }}" class="form-control">
+            </div>
+        </div>
+        <div style="display: flex; gap: 1rem;">
+            <button type="submit" class="btn btn-primary">✅ Save Changes</button>
+            <a href="/teacher/students" class="btn btn-danger">← Cancel</a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
