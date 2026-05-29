@@ -1,1 +1,72 @@
+{% extends 'base.html' %}
+{% block content %}
 
+<div style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h1 style="font-size: 1.5rem; font-weight: 800; color: #0f172a;">📋 {{ student['full_name'] }}'s Attendance</h1>
+        <p style="color: #64748b;">{{ student['class'] }} | {{ student['admission_number'] }}</p>
+    </div>
+    <a href="/parent/dashboard" class="btn btn-primary">← Back</a>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card" style="background: linear-gradient(135deg, #166534, #16a34a);">
+        <div class="stat-label">Days Present</div>
+        <div class="stat-value">{{ present }}</div>
+        <div class="stat-icon">✅</div>
+    </div>
+    <div class="stat-card" style="background: linear-gradient(135deg, #991b1b, #dc2626);">
+        <div class="stat-label">Days Absent</div>
+        <div class="stat-value">{{ total - present }}</div>
+        <div class="stat-icon">❌</div>
+    </div>
+    <div class="stat-card" style="background: linear-gradient(135deg, #0f2b3d, #1e4a76);">
+        <div class="stat-label">Total Days</div>
+        <div class="stat-value">{{ total }}</div>
+        <div class="stat-icon">📅</div>
+    </div>
+    <div class="stat-card" style="background: linear-gradient(135deg, #854d0e, #ca8a04);">
+        <div class="stat-label">Attendance Rate</div>
+        <div class="stat-value" style="font-size: 1.5rem;">
+            {% if total > 0 %}{{ ((present/total)*100)|round(1) }}%{% else %}N/A{% endif %}
+        </div>
+        <div class="stat-icon">📊</div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-title">📋 Attendance Records</div>
+    {% if attendance %}
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Remark</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for a in attendance %}
+                <tr>
+                    <td style="color: #475569;">{{ a['date'] }}</td>
+                    <td>
+                        {% if a['status'] == 'present' %}<span class="badge badge-success">✅ Present</span>
+                        {% elif a['status'] == 'absent' %}<span class="badge badge-danger">❌ Absent</span>
+                        {% else %}<span class="badge badge-warning">⏰ Late</span>{% endif %}
+                    </td>
+                    <td style="color: #475569; font-size: 0.85rem;">{{ a['remark'] or '—' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div style="text-align: center; padding: 3rem; color: #94a3b8;">
+        <div style="font-size: 3rem; margin-bottom: 1rem;">📋</div>
+        <p>No attendance records yet!</p>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}
