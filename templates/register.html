@@ -1,1 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Greenland Academy</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: system-ui, sans-serif;
+            background: linear-gradient(135deg, #0f2b3d, #1e4a76);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        .register-card {
+            background: white;
+            border-radius: 2rem;
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        }
+        .logo { text-align: center; margin-bottom: 2rem; }
+        .logo h1 { font-size: 1.8rem; font-weight: 800; color: #0f172a; }
+        .logo h1 span { color: #2563eb; }
+        .logo p { color: #64748b; font-size: 0.9rem; margin-top: 0.3rem; }
+        .form-group { margin-bottom: 1.2rem; }
+        .form-label { display: block; font-size: 0.85rem; font-weight: 600; color: #475569; margin-bottom: 0.4rem; }
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            font-size: 1rem;
+            background: #f8fafc;
+            transition: 0.2s;
+        }
+        .form-control:focus { outline: none; border-color: #2563eb; background: white; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .btn-register {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #0f2b3d, #1e4a76);
+            color: white;
+            border: none;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 0.5rem;
+        }
+        .alert { padding: 0.8rem 1rem; border-radius: 10px; margin-bottom: 1.2rem; font-size: 0.9rem; font-weight: 500; }
+        .alert-error { background: #fef2f2; border: 1px solid #fca5a5; color: #991b1b; }
+        .alert-success { background: #f0fdf4; border: 1px solid #86efac; color: #166634; }
+        .role-info {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1.2rem;
+            font-size: 0.85rem;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+        }
+        .role-info h4 { font-weight: 700; color: #0f172a; margin-bottom: 0.5rem; }
+        .login-link { text-align: center; margin-top: 1.5rem; font-size: 0.9rem; color: #64748b; }
+        .login-link a { color: #2563eb; font-weight: 600; text-decoration: none; }
+        .back-link { display: block; text-align: center; margin-top: 1.5rem; color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
 
+<div style="width: 100%; max-width: 500px;">
+    <div class="register-card">
+        <div class="logo">
+            <h1> Greenland <span>Academy</span></h1>
+            <p>Create Your Account</p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <div class="role-info">
+            <h4> Registration Info:</h4>
+            <p> Parents → Approved instantly</p>
+            <p> Teachers → Requires admin approval</p>
+        </div>
+
+        <form method="POST" action="/register">
+            <div class="form-group">
+                <label class="form-label">I am registering as:</label>
+                <select name="role" required class="form-control">
+                    <option value="">Select your role</option>
+                    <option value="parent"> Parent</option>
+                    <option value="teacher"> Teacher</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Full Name</label>
+                <input type="text" name="full_name" placeholder="Your full name" required class="form-control">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input type="email" name="email" placeholder="Your email address" required class="form-control">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" name="password" placeholder="Create a password" required class="form-control">
+            </div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label">Phone Number</label>
+                    <input type="tel" name="phone" placeholder="Phone number" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Address</label>
+                    <input type="text" name="address" placeholder="Your address" class="form-control">
+                </div>
+            </div>
+            <button type="submit" class="btn-register">✅ Create Account</button>
+        </form>
+
+        <div class="login-link">
+            Already have an account? <a href="/login">Login here</a>
+        </div>
+    </div>
+    <a href="/" class="back-link">← Back to Home</a>
+</div>
+
+</body>
+</html>
