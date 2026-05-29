@@ -1,1 +1,52 @@
+{% extends 'base.html' %}
+{% block content %}
 
+<div style="margin-bottom: 1.5rem;">
+    <h1 style="font-size: 1.5rem; font-weight: 800; color: #0f172a;">👨‍👩‍👦 Parent Dashboard</h1>
+    <p style="color: #64748b; margin-top: 0.3rem;">Welcome, {{ session.full_name }}!</p>
+</div>
+
+{% if children %}
+<div class="card">
+    <div class="card-title">👨‍🎓 My Children</div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+        {% for child in children %}
+        <div style="background: #f8fafc; border-radius: 1.2rem; padding: 1.5rem; border: 1px solid #e2e8f0;">
+            <div style="font-size: 3rem; text-align: center; margin-bottom: 1rem;">👨‍🎓</div>
+            <h3 style="font-size: 1.1rem; font-weight: 700; text-align: center; color: #0f172a; margin-bottom: 0.3rem;">{{ child['full_name'] }}</h3>
+            <p style="text-align: center; color: #64748b; font-size: 0.9rem; margin-bottom: 1rem;">{{ child['class'] }} — {{ child['admission_number'] }}</p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem;">
+                <a href="/parent/grades/{{ child['id'] }}" class="btn btn-primary btn-sm" style="text-align: center;">📊 Grades</a>
+                <a href="/parent/attendance/{{ child['id'] }}" class="btn btn-primary btn-sm" style="text-align: center;">📋 Attend.</a>
+                <a href="/parent/fees/{{ child['id'] }}" class="btn btn-primary btn-sm" style="text-align: center;">💰 Fees</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% else %}
+<div class="card">
+    <div style="text-align: center; padding: 3rem; color: #94a3b8;">
+        <div style="font-size: 3rem; margin-bottom: 1rem;">👨‍🎓</div>
+        <p style="font-size: 1.1rem; font-weight: 600;">No children linked to your account yet!</p>
+        <p style="font-size: 0.9rem; margin-top: 0.5rem;">Please contact the school admin to link your child's profile.</p>
+    </div>
+</div>
+{% endif %}
+
+{% if announcements %}
+<div class="card">
+    <div class="card-title">📢 School Announcements</div>
+    <div style="display: flex; flex-direction: column; gap: 0.8rem;">
+        {% for ann in announcements %}
+        <div style="padding: 1rem; background: #f8fafc; border-radius: 10px; border-left: 3px solid #2563eb;">
+            <div style="font-weight: 600; color: #0f172a;">{{ ann['title'] }}</div>
+            <p style="color: #475569; font-size: 0.9rem; margin-top: 0.3rem;">{{ ann['content'] }}</p>
+            <div style="font-size: 0.8rem; color: #94a3b8; margin-top: 0.5rem;">{{ ann['date_posted'][:10] }} — {{ ann['author'] }}</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}
