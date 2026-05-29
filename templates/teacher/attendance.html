@@ -1,1 +1,97 @@
+{% extends 'base.html' %}
+{% block content %}
 
+<div style="margin-bottom: 1.5rem;">
+    <h1 style="font-size: 1.5rem; font-weight: 800; color: #0f172a;">📋 Attendance Management</h1>
+</div>
+
+<div class="card">
+    <div class="card-title">✅ Mark Attendance</div>
+    <form method="POST" action="/teacher/attendance">
+        <div class="form-grid" style="margin-bottom: 1rem;">
+            <div class="form-group">
+                <label class="form-label">Date</label>
+                <input type="date" name="date" required class="form-control">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Class</label>
+                <select name="class" required class="form-control">
+                    <option value="">Select Class</option>
+                    {% for cls in ['Primary 1','Primary 2','Primary 3','Primary 4','Primary 5','Primary 6','JSS 1','JSS 2','JSS 3','SSS 1','SSS 2','SSS 3'] %}
+                    <option value="{{ cls }}">{{ cls }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        {% if students %}
+        <div class="table-container" style="margin-bottom: 1rem;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Student Name</th>
+                        <th>Class</th>
+                        <th style="text-align: center;">Present</th>
+                        <th style="text-align: center;">Absent</th>
+                        <th style="text-align: center;">Late</th>
+                        <th>Remark</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in students %}
+                    <tr>
+                        <td style="font-weight: 600;">{{ s['full_name'] }}</td>
+                        <td style="color: #475569;">{{ s['class'] }}</td>
+                        <td style="text-align: center;"><input type="radio" name="status_{{ s['id'] }}" value="present" checked></td>
+                        <td style="text-align: center;"><input type="radio" name="status_{{ s['id'] }}" value="absent"></td>
+                        <td style="text-align: center;"><input type="radio" name="status_{{ s['id'] }}" value="late"></td>
+                        <td><input type="text" name="remark_{{ s['id'] }}" placeholder="Optional" class="form-control" style="padding: 6px 10px; font-size: 0.85rem;"></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+        <button type="submit" class="btn btn-primary">✅ Save Attendance</button>
+    </form>
+</div>
+
+<div class="card">
+    <div class="card-title">📋 Recent Attendance</div>
+    {% if attendance %}
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Student</th>
+                    <th>Class</th>
+                    <th>Status</th>
+                    <th>Remark</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for a in attendance %}
+                <tr>
+                    <td style="color: #475569; font-size: 0.85rem;">{{ a['date'] }}</td>
+                    <td style="font-weight: 600;">{{ a['full_name'] }}</td>
+                    <td style="color: #475569;">{{ a['class'] }}</td>
+                    <td>
+                        {% if a['status'] == 'present' %}<span class="badge badge-success">✅ Present</span>
+                        {% elif a['status'] == 'absent' %}<span class="badge badge-danger">❌ Absent</span>
+                        {% else %}<span class="badge badge-warning">⏰ Late</span>{% endif %}
+                    </td>
+                    <td style="color: #475569; font-size: 0.85rem;">{{ a['remark'] or '—' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div style="text-align: center; padding: 3rem; color: #94a3b8;">
+        <div style="font-size: 3rem; margin-bottom: 1rem;">📋</div>
+        <p>No attendance records yet!</p>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}
