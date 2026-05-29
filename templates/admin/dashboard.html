@@ -1,1 +1,86 @@
+{% extends 'base.html' %}
+{% block content %}
 
+<div style="margin-bottom: 1.5rem;">
+    <h1 style="font-size: 1.5rem; font-weight: 800; color: #0f172a;">👑 Admin Dashboard</h1>
+    <p style="color: #64748b; margin-top: 0.3rem;">Welcome back, {{ session.full_name }}!</p>
+</div>
+
+{% if pending_teachers > 0 %}
+<div class="alert alert-warning">
+    ⚠️ You have {{ pending_teachers }} teacher(s) waiting for approval!
+    <a href="/admin/teachers" style="font-weight: 700; color: #92400e; margin-left: 0.5rem;">Review Now →</a>
+</div>
+{% endif %}
+
+<div class="stats-grid">
+    <div class="stat-card" style="background: linear-gradient(135deg, #0f2b3d, #1e4a76);">
+        <div class="stat-label">Total Students</div>
+        <div class="stat-value">{{ total_students }}</div>
+        <div class="stat-icon">👨‍🎓</div>
+    </div>
+    <div class="stat-card" style="background: linear-gradient(135deg, #166534, #16a34a);">
+        <div class="stat-label">Teachers</div>
+        <div class="stat-value">{{ total_teachers }}</div>
+        <div class="stat-icon">👨‍🏫</div>
+    </div>
+    <div class="stat-card" style="background: linear-gradient(135deg, #854d0e, #ca8a04);">
+        <div class="stat-label">Parents</div>
+        <div class="stat-value">{{ total_parents }}</div>
+        <div class="stat-icon">👨‍👩‍👦</div>
+    </div>
+    <div class="stat-card" style="background: linear-gradient(135deg, #991b1b, #dc2626);">
+        <div class="stat-label">Pending Teachers</div>
+        <div class="stat-value">{{ pending_teachers }}</div>
+        <div class="stat-icon">⏳</div>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+
+    <div class="card">
+        <div class="card-title">⚡ Quick Actions</div>
+        <div style="display: flex; flex-direction: column; gap: 0.8rem;">
+            <a href="/admin/students" class="btn btn-primary">👨‍🎓 Manage Students</a>
+            <a href="/admin/teachers" class="btn btn-primary">👨‍🏫 Manage Teachers</a>
+            <a href="/admin/fees" class="btn btn-primary">💰 Manage Fees</a>
+            <a href="/admin/announcements" class="btn btn-primary">📢 Post Announcement</a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">👨‍🎓 Recent Students</div>
+        {% if recent_students %}
+        {% for s in recent_students %}
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.7rem; background: #f8fafc; border-radius: 10px; margin-bottom: 0.5rem;">
+            <div>
+                <div style="font-weight: 600; font-size: 0.9rem;">{{ s['full_name'] }}</div>
+                <div style="font-size: 0.8rem; color: #64748b;">{{ s['class'] }} | {{ s['admission_number'] }}</div>
+            </div>
+            <a href="/report/{{ s['id'] }}" class="btn btn-sm btn-primary">View</a>
+        </div>
+        {% endfor %}
+        {% else %}
+        <p style="color: #94a3b8; text-align: center; padding: 2rem;">No students yet!</p>
+        {% endif %}
+        <a href="/admin/students" style="color: #2563eb; font-size: 0.85rem; font-weight: 600; text-decoration: none;">View all →</a>
+    </div>
+
+    <div class="card">
+        <div class="card-title">📢 Recent Announcements</div>
+        {% if announcements %}
+        {% for ann in announcements %}
+        <div style="padding: 0.8rem; background: #f8fafc; border-radius: 10px; border-left: 3px solid #2563eb; margin-bottom: 0.5rem;">
+            <div style="font-weight: 600; font-size: 0.9rem;">{{ ann['title'] }}</div>
+            <div style="font-size: 0.8rem; color: #64748b; margin-top: 0.2rem;">{{ ann['date_posted'][:10] }} — {{ ann['author'] }}</div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <p style="color: #94a3b8; text-align: center; padding: 2rem;">No announcements yet!</p>
+        {% endif %}
+        <a href="/admin/announcements" style="color: #2563eb; font-size: 0.85rem; font-weight: 600; text-decoration: none;">View all →</a>
+    </div>
+
+</div>
+
+{% endblock %}
