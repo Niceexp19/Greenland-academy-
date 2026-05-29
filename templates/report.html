@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+    <h1 style="font-size: 1.5rem; font-weight: 800; color: #0f172a;">📄 Student Report Card</h1>
+    <button onclick="window.print()" class="btn btn-primary">🖨️ Print Report</button>
+</div>
+
+{% if student %}
+
+<div class="card" style="background: linear-gradient(135deg, #0f2b3d, #1e4a76); color: white;">
+    <div style="display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
+        <div style="font-size: 4rem;">👨‍🎓</div>
+        <div>
+            <h2 style="font-size: 1.5rem; font-weight: 800;">{{ student['full_name'] }}</h2>
+            <div style="color: #94a3b8; margin-top: 0.3rem; display: flex; flex-wrap: wrap; gap: 1rem;">
+                <span>📚 {{ student['class'] }} — Section {{ student['section'] }}</span>
+                <span>🎫 {{ student['admission_number'] }}</span>
+                <span>⚧ {{ student['gender'] }}</span>
+            </div>
+            {% if student['parent_name'] %}
+            <div style="color: #94a3b8; margin-top: 0.3rem;">
+                👨‍👩‍👦 Parent: {{ student['parent_name'] }}
+                {% if student['parent_phone'] %} | 📞 {{ student['parent_phone'] }}{% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card" style="background: linear-gradient(135deg, #166534, #16a34a);">
+        <div class="stat-label">Days Present</div>
+        <div class="stat-value">{{ present }}</div>
+        <div class="stat-icon">✅</div>
+    </div>
+    <div class="stat-card" style="background: linear-gradient(135deg, #991b1b, #dc2626);">
+        <div class="stat-label">Days Absent</div>
+        <div class="stat-value">{{ total_days - present }}</div>
+        <div class="stat-icon">❌</div>
+    </div>
+    <div class="stat-card" style="background: linear-gradient(135deg, #854d0e, #ca8a04);">
+        <div class="stat-label">Total Days</div>
+        <div class="stat-value">{{ total_days }}</div>
+        <div class="stat-icon">📅</div>
+    </div>
+    <div class="stat-card" style="background: linear-gradient(135deg, #0f2b3d, #1e4a76);">
+        <div class="stat-label">Attendance Rate</div>
+        <div class="stat-value" style="font-size: 1.5rem;">
+            {% if total_days > 0 %}{{ ((present/total_days)*100)|round(1) }}%{% else %}N/A{% endif %}
+        </div>
+        <div class="stat-icon">📊</div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-title">📊 Academic Performance</div>
+    {% if grades %}
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Subject</th>
+                    <th>CA (40)</th>
+                    <th>Exam (60)</th>
+                    <th>Total (100)</th>
+                    <th>Grade</th>
+                    <th>Term</th>
+                    <th>Session</th>
+                    <th>Teacher</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for g in grades %}
+                <tr>
+                    <td style="font-weight: 600;">{{ g['subject'] }}</td>
+                    <td>{{ g['ca_score'] }}</td>
+                    <td>{{ g['exam_score'] }}</td>
+                    <td style="font-weight: 700;">{{ g['total_score'] }}</td>
+                    <td>
+                        {% if g['grade'] == 'A' %}<span class="badge badge-success">🌟 A</span>
+                        {% elif g['grade'] == 'B' %}<span class="badge badge-info">👍 B</span>
+                        {% elif g['grade'] == 'C' %}<span class="badge badge-warning">😊 C</span>
+                        {% elif g['grade'] == 'D' %}<span class="badge badge-warning">😐 D</span>
+                        {% elif g['grade'] == 'E' %}<span class="badge badge-pending">😬 E</span>
+                        {% else %}<span class="badge badge-danger">❌ F</span>{% endif %}
+                    </td>
+                    <td style="color: #475569;">{{ g['term'] }}</td>
+                    <td style="color: #475569;">{{ g['session'] }}</td>
+                    <td style="color: #475569; font-size: 0.85rem;">{{ g['teacher_name'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div style="text-align: center; padding: 2rem; color: #94a3b8;"><p>No grades recorded yet!</p></div>
+    {% endif %}
+</div>
+
+<div class="card">
+    <div class="card-title">💰 Fee Payment History</div>
+    {% if fees %}
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Fee Type</th>
+                    <th>Amount</th>
+                    <th>Term</th>
+                    <th>Session</th>
+                    <th>Status</th>
+                    <th>Date Paid</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for fee in fees %}
+                <tr>
+                    <td style="font-weight: 600;">{{ fee['fee_type'] }}</td>
+                    <td style="font-weight: 700;">₦{{ fee['amount'] }}</td>
+                    <td style="color: #475569;">{{ fee['term'] }}</td>
+                    <td style="color: #475569;">{{ fee['session'] }}</td>
+                    <td>
+                        {% if fee['status'] == 'paid' %}<span class="badge badge-success">✅ Paid</span>
+                        {% elif fee['status'] == 'pending' %}<span class="badge badge-danger">⏳ Pending</span>
+                        {% else %}<span class="badge badge-warning">🔄 Partial</span>{% endif %}
+                    </td>
+                    <td style="color: #475569; font-size: 0.85rem;">{{ fee['date_paid'] or '—' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div style="text-align: center; padding: 2rem; color: #94a3b8;"><p>No fee records yet!</p></div>
+    {% endif %}
+</div>
+
+{% endif %}
+
+{% endblock %}
