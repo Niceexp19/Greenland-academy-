@@ -1,1 +1,60 @@
+{% extends 'base.html' %}
+{% block content %}
 
+<div style="margin-bottom: 1.5rem;">
+    <h1 style="font-size: 1.5rem; font-weight: 800; color: #0f172a;">👨‍🏫 Teacher Management</h1>
+</div>
+
+<div class="card">
+    <div class="card-title">📋 All Teachers</div>
+    {% if teachers %}
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Status</th>
+                    <th>Registered</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for teacher in teachers %}
+                <tr>
+                    <td style="font-weight: 600;">{{ teacher['full_name'] }}</td>
+                    <td style="color: #475569;">{{ teacher['email'] }}</td>
+                    <td style="color: #475569;">{{ teacher['phone'] or '—' }}</td>
+                    <td>
+                        {% if teacher['status'] == 'approved' %}
+                        <span class="badge badge-success">✅ Approved</span>
+                        {% else %}
+                        <span class="badge badge-pending">⏳ Pending</span>
+                        {% endif %}
+                    </td>
+                    <td style="color: #475569; font-size: 0.85rem;">{{ teacher['date_registered'][:10] }}</td>
+                    <td>
+                        <div style="display: flex; gap: 0.5rem;">
+                            {% if teacher['status'] == 'pending' %}
+                            <a href="/admin/approve_teacher/{{ teacher['id'] }}" class="btn btn-success btn-sm">✅ Approve</a>
+                            <a href="/admin/reject_teacher/{{ teacher['id'] }}" onclick="return confirm('Reject and remove this teacher?')" class="btn btn-danger">❌ Reject</a>
+                            {% else %}
+                            <a href="/admin/reject_teacher/{{ teacher['id'] }}" onclick="return confirm('Remove this teacher?')" class="btn btn-danger">🗑️ Remove</a>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div style="text-align: center; padding: 3rem; color: #94a3b8;">
+        <div style="font-size: 3rem; margin-bottom: 1rem;">👨‍🏫</div>
+        <p>No teachers registered yet!</p>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}
