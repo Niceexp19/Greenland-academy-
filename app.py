@@ -1,3 +1,7 @@
+from database import get_db, init_db
+
+# Force initialize database
+init_db()
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from functools import wraps
 from database import get_db, init_db
